@@ -1,0 +1,263 @@
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>Concessions Infimes</title>
+
+<link rel="stylesheet" type="text/css" href="CookieDecapitator.css">
+
+<script src="jquery-1.11.3.min.js"></script>
+<script src="Augmenters.js"></script>
+<script src="Item.js"></script>
+<script src="Infos.js"></script>
+<script src="Exactions.js"></script>
+<script src="Values.js"></script>
+<script type="text/javascript">
+$.fn.random = function() {
+	return this.eq(Math.floor(Math.random() * this.length));
+}
+</script>
+<script type="text/javascript">
+
+function expo( base, n ) {
+	return base*Math.pow(1.15, n);
+}
+
+function save() {
+	Values.save();
+	console.log("state saved");
+}
+setInterval( save, 10000 );
+
+function reset() {
+	Values.reset();
+	location.reload();
+}
+
+function buyAugmenter( aug ) {
+
+	if ( Values.capital < augmenterValue(aug.id) ) return;
+
+	confirmBuy( aug, function(){
+		console.log( "buying " + aug.name );
+		Values.capital -= augmenterValue(aug.id);
+		if (Values.augmenters[aug.id]>0){
+			++Values.augmenters[aug.id];
+		} else {
+			Values.augmenters[aug.id] = 1;
+		}
+
+		addHolding( aug.id );
+
+		// display
+		$("#cps").text( "+" + Values.cps + " par seconde" );
+	});
+
+}
+
+function buyItem(item) {
+	if ( Values.capital < item.price || Values.items[item.id] ) return;
+
+	console.log( "buying " + item.name );
+	Values.capital -= item.price;
+	Values.items[item.id] = 1;
+
+	item.onBuy();
+
+}
+
+function confirmBuy( aug, callback ) {
+
+	if ( aug.buyConfirmation ) {
+		var ex = getExaction();
+		$("#confirmation-popup").addClass( aug.id );
+		$("#confirmation-popup p .message").text( ex.texte );
+		$("#confirmation-popup p .source").html( '<a target="_blank" href="'+ex.source+'">[source]</a>' );
+		$("#confirmation-popup-ok").one("click", function() {
+			$("#confirmation-popup").removeClass( aug.confirmation );
+			$("#confirmation-popup").hide();
+			callback();
+		});
+		$("#confirmation-popup-cancel").one("click", function() {
+			$("#confirmation-popup").removeClass( aug.confirmation );
+			$("#confirmation-popup").hide();
+			$("#go-popup").show();
+		});
+		$("#confirmation-popup").show();
+	} else {
+		callback();
+	}
+
+}
+
+function addHolding( id ) {
+	$("#holdings").append( $("<li>" + Augmenters[id].name + "</li>") );
+	$("#augmenter_"+id+" .owned").text( Values.augmenters[id] );
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////// On Ready
+$( document ).ready(function() {
+
+console.log( "ready!" );
+
+createAugmenterList();
+
+createShop();
+
+// load from MAYBE previous state
+for ( augId in Augmenters ) {
+	for ( i=0; i<Values.augmenters[augId]; ++i ) {
+		addHolding( augId );
+	}
+}
+$("#capital").text( Values.capital );
+$("#cps").text( "+" +Values.cps+ " par seconde" );
+checkAugmenters();
+checkItems();
+
+// start tuto if needed
+if (!Values.tuto_intro) {
+	$("#intro-popup").show();
+}
+
+function mainClick() {
+	$("#clicker").toggleClass("toggle");
+	console.log("click");
+	Values.capital += Values.clickValue;
+}
+$("#clicker").click( mainClick );
+
+function mainTimer() {
+	Values.capital += Values.cps;
+}
+setInterval( mainTimer, 1000 );
+
+addInfo();
+setInterval( addInfo, 20000 );
+
+});
+</script>
+
+</head>
+<body>
+<div id="leftColumn">
+	<div id="title"></div>
+	<div id="clicker">
+		<span style="text-align:center">Cliquez pour remporter des contrats</span>
+	</div>
+
+	<div id="counters">
+		Contrats<br/>
+		<span id="capital">0</span><br/>
+		<span id="cps">0</span><br/>
+		<span id="cpc">1</span>
+	</div>
+</div>
+
+<div id="centerColumn">
+	<ul id="holdings">
+	</ul>
+</div>
+
+<div id="rightColumn">
+	<div id="infos">
+		<div class="content">
+		</div>
+	</div>
+
+	<ul id="augmenters">
+		<li id="augmenter_proto" class="augmenter" style="display:none;">
+			<div class="owned">0</div>
+			<div class="icon"></div>
+			<div class="nametag">
+				<span class="name">plop</span><br/>
+				<span class="desc">do the Doo</span>
+			</div>
+			<div class="buy">
+				<span class="buy-caption">Négocier</span>
+				<span class="price">0</span>
+			</div>
+		</li>
+	</ul>
+	<ul id="shop">
+	</ul>
+</div>
+
+<div id="augmenter-tooltip">
+	<span class="name"></span><br/>
+	<span class="gimmick"></span><br/>
+	<span class="desc"></span><br/>
+	<span class="price"></span>
+</div>
+
+<div id="confirmation-popup" style="display:none;">
+	<div id="confirmation-popup-content">
+		<p>
+			<span class="message"></span><br/>
+			<span class="source"></span>
+			<br/>
+			<br/>
+		</p>
+
+		<p>Monsieur le Président, souhaitez-vous interrompre les relations diplomatiques avec l'Arabie Saoudite?</p>
+		<p><br/></p>
+		<div id="confirmation-popup-ok">Non</div>
+		<div id="confirmation-popup-cancel">Oui</div>
+		<p><br/></p>
+	</div>
+	
+</div>
+
+<div id="intro-popup" style="display:none;">
+	<div id="intro-popup-content">
+		<p>
+			26 septembre 2015, Riyad<br/>
+			<br/>
+			Monsieur le Président,<br/>
+			L’Arabie saoudite est un partenaire économique et politique privilégié de la France.<br/>
+			<br/>
+			Les relations politiques que le Royaume et notre nation ont su tisser au cours des ans sont étroites et denses. Nos orientations géopolitiques et économiques se rejoignent et favorisent la convergence de nos deux pays. Aujourd’hui, l’Arabie saoudite se propose d’effectuer des investissements importants en France.<br/>
+			<br/>
+			Premier partenaire commercial dans le Golfe et deuxième au Moyen-Orient derrière la Turquie, l’Arabie saoudite constitue un marché porteur pour nos entreprises dans la plupart de nos secteurs d’activité.<br/>
+			<br/>
+			Notre solde commercial est cependant redevenu négatif.<br/>
+			<br/>
+			Au-delà des secteurs pétrolier et parapétrolier, nos intérêts se situent donc également dans ceux des transports ferroviaires urbains et à grande vitesse, dans le nucléaire civil ainsi que dans la défense. L’Arabie saoudite est le premier client de la France dans le secteur de l’armement.<br/>
+			<br/>
+			Nous nous permettons donc, Monsieur le Président, de vous solliciter afin que vous intercédiez personnellement en vue de la bonne suite des relations commerciales entre la France et l’Arabie saoudite.<br/>
+			<br/>
+			Votre conseiller spécial au Moyen-Orient.<br/>
+		</p>
+
+		<div id="intro-popup-ok" onClick='$("#intro-popup").hide(); Values.tuto_intro = true; save();'>J'ai compris ce que la France attend de moi, et je prendrai toutes les mesures nécessaires.</div>
+	</div>
+</div>
+
+<div id="go-popup" style="display:none;">
+	<div id="go-popup-content">
+		<p>
+			Bravo, monsieur le Président !<br/>
+			<br/>
+			Votre courage politique, votre attachement aux valeurs humanistes et à la défense des Droits de l’Homme, viennent de provoquer une 			crise diplomatique, politique et économique majeure pour la France.<br/>
+			<br/>
+			Toutefois, à la suite à la rupture unilatérale de nos échanges commerciaux avec l’Arabie Saoudite, le roi Salmane ben Abdelaziz Al 			Saoud a demandé le retrait de tous les ressortissants Français, y compris les membres de l'ambassade Française du territoire Saoudien.			<br/>
+			<br/>
+			Les 68 entreprises Françaises présentes dans le royaume se retrouvent ainsi avec un manque à gagner global de 1,8 milliard d’euros 			par an.<br/>
+			<br/>
+			L’annulation de la dizaine de contrats signés, pour 11 milliards d’euros, par la délégation Saoudienne lors de leur venue à l’Elysée 			le mercredi 24 juin 2015, et les pénalités qui en découlent, portent un lourd coup à l’économie Française.<br/>
+			<br/>
+			Nous perdons aussi l’un de nos plus grands alliés stratégiques dans cette région instable, nous fragilisant énormément dans notre 			lutte contre l’influence de l’Iran.<br/>
+			<br/>
+			Enfin, en voulant bien faire, vous venez de saboter l’ensemble des efforts de coopération culturelle, scientifique et technique, et 			tout l’appui aux promotions des Droits de l’Homme, notamment celle de la situation des femmes,  que nous avions mis en place en 			Arabie Saoudite.<br/>
+			<br/>
+			Cordialement,<br/>
+			<br/>
+			Votre conseiller spécial au Moyen-Orient.<br/>
+		</p>
+		
+		<div id="go-popup-ok" onClick='reset();'>Game Over</div>
+	</div>
+</div>
+
+</body>
+</html>

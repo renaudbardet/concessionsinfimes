@@ -55,6 +55,19 @@ body {
 	height: 166px;
 }
 
+/*#clicker {
+	position:absolute;
+	background: url("assets/clic_me.png") no-repeat;
+	background-size: 100%;
+	top:166px;
+	bottom: 152px;
+	width:100%;
+	cursor: hand;
+	margin-top: 20px;
+	padding: 20px;
+	text-align:center;
+	color:white;
+}*/
 #clicker {
 	position:absolute;
 	background: url("assets/clic_me.png") no-repeat;
@@ -62,7 +75,6 @@ body {
 	top:166px;
 	bottom: 152px;
 	width:100%;
-	/*max-height:100%;*/
 	cursor: hand;
 	margin-top: 20px;
 	padding: 20px;
@@ -273,7 +285,7 @@ ul#shop li.bought.enabled {
 	cursor:pointer;
 }
 
-#augmenter-tooltip {
+/*#augmenter-tooltip {
 	position: absolute;
 	display:none;
 	background:#1cbbb4;
@@ -283,8 +295,34 @@ ul#shop li.bought.enabled {
 	padding:10px;
 	border-radius:5px;
 	height:150px;
-	width:500px;
+	max-width:400px;
 	overflow:hidden;
+}*/
+#augmenter-tooltip {
+	position: absolute;
+	display:none;
+	background:#1cbbb4;
+	font-size:16pt;
+	line-height:1.2em;
+	color:white;
+	padding:10px;
+	height:150px;
+	max-width:400px;
+	border-radius:5px;
+	border: 2px solid #ffffff;
+	box-shadow:2px 2px 12px #293b4f;
+	/*overflow:hidden;*/
+}
+
+#augmenter-tooltip:after{
+    border: 1px solid;
+    border-color: white transparent;
+    border-width: 12px 12px 0 12px;
+    bottom: -12px;
+    content: "";
+    left: 20px;
+    position: absolute;
+    z-index: 99;
 }
 
 #augmenter-tooltip .name {
@@ -300,6 +338,130 @@ ul#shop li.bought.enabled {
 #augmenter-tooltip .price {
 	font-size:10pt;
 }
+#tuto01{
+	position: absolute;
+	top: 260px;
+	left: 400px;
+	display:none;
+	background:#1cbbb4;
+	font-size:16pt;
+	line-height:1.2em;
+	color:white;
+	padding:10px;
+	max-width:400px;
+	border-radius:5px;
+	border: 2px solid #ffffff;
+	box-shadow:2px 2px 12px #293b4f;
+}
+#tuto01:after{
+    border: 1px solid;
+    border-color: transparent white;
+    border-width: 12px  12px 12px 0;
+    bottom: 50%;
+    content: "";
+    left: -12px;
+    position: absolute;
+    z-index: 98;
+}
+#tuto02{
+	position: absolute;
+	top: 300px;
+	left: 400px;
+	display:none;
+	background:#1cbbb4;
+	font-size:16pt;
+	line-height:1.2em;
+	color:white;
+	padding:10px;
+	max-width:400px;
+	border-radius:5px;
+	border: 2px solid #ffffff;
+	box-shadow:2px 2px 12px #293b4f;
+}
+#tuto02:after{
+    border: 1px solid;
+    border-color: transparent white;
+    border-width: 12px  12px 12px 0;
+    bottom: 50%;
+    content: "";
+    left: -12px;
+    position: absolute;
+    z-index: 98;
+}
+#tuto03{
+	position: absolute;
+	top: 220px;
+	left: 550px;
+	display:none;
+	background:#1cbbb4;
+	font-size:16pt;
+	line-height:1.2em;
+	color:white;
+	padding:10px;
+	max-width:400px;
+	border-radius:5px;
+	border: 2px solid #ffffff;
+	box-shadow:2px 2px 12px #293b4f;
+}
+#tuto03:after{
+    border: 1px solid;
+    border-color: white transparent;
+    border-width: 0 12px 12px 12px ;
+    top: -12px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 98;
+}
+#tuto04{
+	position: absolute;
+	top: 220px;
+	left: 800px;
+	display:none;
+	background:#1cbbb4;
+	font-size:16pt;
+	line-height:1.2em;
+	color:white;
+	padding:10px;
+	max-width:400px;
+	border-radius:5px;
+	border: 2px solid #ffffff;
+	box-shadow:2px 2px 12px #293b4f;
+}
+#tuto04:after{
+    border: 1px solid;
+    border-color: white transparent;
+    border-width: 0 12px 12px 12px ;
+    top: -12px;
+    content: "";
+    right: 20%;
+    position: absolute;
+    z-index: 98;
+}
+#tuto05{
+	position: absolute;
+	display:none;
+	background:#1cbbb4;
+	font-size:16pt;
+	line-height:1.2em;
+	color:white;
+	padding:10px;
+	max-width:400px;
+	border-radius:5px;
+	border: 2px solid #ffffff;
+	box-shadow:2px 2px 12px #293b4f;
+}
+#tuto05:after{
+    border: 1px solid;
+    border-color: white transparent;
+    border-width: 12px  12px 0 12px;
+    bottom: -12;
+    content: "";
+    left: 12px;
+    position: absolute;
+    z-index: 98;
+}
+
 
 #confirmation-popup {
 	position: absolute;

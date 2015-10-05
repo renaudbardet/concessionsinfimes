@@ -37,7 +37,7 @@ function reset() {
 function buyAugmenter( aug ) {
 
 	if ( Values.capital < augmenterValue(aug.id) ) return;
-
+	
 	confirmBuy( aug, function(){
 		console.log( "buying " + aug.name );
 		Values.capital -= augmenterValue(aug.id);
@@ -52,6 +52,14 @@ function buyAugmenter( aug ) {
 		// display
 		$("#cps").text( "+" + Values.cps + " par seconde" );
 	});
+	
+	if( Values.tutoriel != 3) return;
+	if (document.getElementById("tuto03").style.display=="block")
+	{
+		$("#tuto03").hide();
+		Values.tutoriel = 10;
+		Values.save();
+	}
 
 }
 
@@ -119,11 +127,36 @@ checkItems();
 if (!Values.tuto_intro) {
 	$("#intro-popup").show();
 }
+else if (Values.tutoriel>0 && Values.tutoriel<5) {
+	$("#tuto0"+Values.tutoriel).show();
+}
+else if (Values.tutoriel == 5) {
+	showTutoItem();
+}
 
 function mainClick() {
 	$("#clicker").toggleClass("toggle");
-	console.log("click");
+	console.log("click / Values.tutoriel "+Values.tutoriel+" ");
 	Values.capital += Values.clickValue;
+	if (Values.tutoriel > 2) return;
+	if (Values.capital > 0 && Values.capital < 5 && document.getElementById("tuto01").style.display=="block")
+	{
+
+		$("#tuto01").hide();
+		$("#tuto02").show();
+		Values.tutoriel = 2;
+		Values.save();
+
+	}
+	else if (Values.capital >= 5 && Values.augmenters[Augmenters.diplomate.id] <2 && document.getElementById("tuto02").style.display=="block")
+	{
+
+		$("#tuto02").hide();
+		$("#tuto03").show();
+		Values.tutoriel = 3;
+		Values.save();
+
+	}
 }
 $("#clicker").click( mainClick );
 
@@ -143,9 +176,8 @@ setInterval( addInfo, 20000 );
 <div id="leftColumn">
 	<div id="title"></div>
 	<div id="clicker">
-		<span style="text-align:center">Cliquez pour remporter des contrats</span>
+		<span style="text-align:center">Cliquez pour négocier un contrat</span>
 	</div>
-
 	<div id="counters">
 		Contrats<br/>
 		<span id="capital">0</span><br/>
@@ -207,6 +239,22 @@ setInterval( addInfo, 20000 );
 	</div>
 	
 </div>
+	<div id="tuto01" style="display:none;">
+		<p>Monsieur le Président, veuillez s'il vous plaît cliquer ici pour négocier votre premier contrat.<br/></p>
+	</div>
+	<div id="tuto02" style="display:none;">
+		<p>Bien, Monsieur le Président, continuez de cliquer pour négocier plus de contrats.<br/></p>
+	</div>
+	<div id="tuto03" style="display:none;">
+		<p>Monsieur le Président, vous pouvez maintenant envoyer un diplomate négocier à votre place.<br/></p>
+	</div>
+	<div id="tuto04" style="display:none;">
+		<p>Monsieur le Président, pourquoi ne pas développer le secteur du Luxe, maintenant ?<br/></p>
+	</div>
+	<div id="tuto05" style="display:none;">
+		<p>Monsieur le Président, si vous en avez assez des messages de ces ONG vous pouvez essayer ceci.<br/></p>
+	</div>
+
 
 <div id="intro-popup" style="display:none;">
 	<div id="intro-popup-content">
@@ -229,7 +277,7 @@ setInterval( addInfo, 20000 );
 			Votre conseiller spécial au Moyen-Orient.<br/>
 		</p>
 
-		<div id="intro-popup-ok" onClick='$("#intro-popup").hide(); Values.tuto_intro = true; save();'>J'ai compris ce que la France attend de moi, et je prendrai toutes les mesures nécessaires.</div>
+		<div id="intro-popup-ok" onClick='$("#intro-popup").hide(); $("#tuto01").show(); Values.tuto_intro = true; Values.tutoriel = 1; save();'>J'ai compris ce que la France attend de moi, et je prendrai toutes les mesures nécessaires.</div>
 	</div>
 </div>
 

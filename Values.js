@@ -46,6 +46,8 @@ var Values = {
 	,clickValue: Number(loadProp("clickValue", 1))
 
 	,tuto_intro: loadProp("tuto_intro", "false") != "false"
+	
+	,tutoriel: Number(loadProp("tutoriel", 0))
 
 	,save() {
 		localStorage[ "Values_capital" ] = this._capital;
@@ -53,6 +55,7 @@ var Values = {
 		for ( augId in this.augmenters ) { localStorage[ "Values_augmenter_" + augId] = this.augmenters[augId]; }
 		for ( itemId in this.items ) { localStorage[ "Values_item_" + itemId] = this.items[itemId]; }
 		localStorage[ "Values_tuto_intro" ] = this.tuto_intro;
+		localStorage[ "Values_tutoriel" ] = this.tutoriel;
 	}
 
 	,reset() {
@@ -61,5 +64,6 @@ var Values = {
 		for ( augId in this.augmenters ) { localStorage[ "Values_augmenter_" + augId ] = 0; }
 		for ( itemId in this.items ) { localStorage[ "Values_item_" + itemId] = false; }
 		localStorage[ "Values_tuto_intro" ] = false;
+		localStorage[ "Values_tutoriel" ] = 0;
 	}
 };

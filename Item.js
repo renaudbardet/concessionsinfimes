@@ -107,6 +107,9 @@ function createShop() {
 					tooltip.find(".gimmick").text( item.gimmick );
 					tooltip.find(".desc").text( item.description );
 					tooltip.find(".price").text( "coût: "+item.price+" contrats" );
+					/*tooltip.css({
+						width:400px
+					});*/
 				}
 				else
 				{
@@ -114,14 +117,20 @@ function createShop() {
 					tooltip.find(".gimmick").text( "???" );
 					tooltip.find(".desc").text( "???" );
 					tooltip.find(".price").text( "???" );
+					/*tooltip.css({
+						width:100px
+					});*/
 				}
 				tooltip.css({
 					top:(pos.top-152) + "px",
 					left:pos.left + "px"
 				});
-				console.log("---"+item.gimmick);
 				tooltip.show(0);
 				
+				if(itemId != "somnifere" && Values.tutoriel != 5) return;
+				Values.tutoriel = 100;
+				Values.save();
+				$("#tuto05").hide();
 			});
 		item_display.mouseleave( augId, function(e){
 				$("#augmenter-tooltip").hide(0);
@@ -155,4 +164,22 @@ function checkItems() {
 		}
 		item_display.find(".price").text( item.price );
 	}
+	if (Values.tutoriel != 10) return;
+	if(Items["somnifere"].available && document.getElementById("tuto03").style.display!="block")
+	{
+		Values.tutoriel = 5;
+		Values.save();
+		showTutoItem();
+	}
+}
+
+function showTutoItem()
+{
+	var item_display = $("#item_somnifere");
+	var pos = item_display.offset();
+	$("#tuto05").css({
+		top:pos.top - 120,
+		left:pos.left + 5
+	})
+	$("#tuto05").show();
 }

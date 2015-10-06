@@ -173,7 +173,7 @@ li.augmenter .owned {
 	position: absolute;
 	width: 106px;
 	height: 43px;
-	background: url("assets/number_tag.png");
+	background: url("assets/augmenter/numbertag.png");
 	padding: 15px;
 	bottom: 0;
 	font-size: 25px;
@@ -186,7 +186,8 @@ li.augmenter .nametag {
 	right:0;
 	width: 325px;
 	height: 59px;
-	background: url("assets/nametag.png");
+	background: url("assets/augmenter/nametag.png");
+	background-position: 0 59px;
 	padding: 10px 15px;
 }
 
@@ -204,7 +205,8 @@ li.augmenter .buy {
 	bottom: 0;
 	width: 325px;
 	height: 42px;
-	background: url("assets/idle.png");
+	background: url("assets/augmenter/pricetag.png");
+	background-position: 0 -82px;
 	padding: 10px 15px 10px 15px;
 }
 
@@ -219,16 +221,17 @@ li.augmenter.enabled {
 }
 
 li.augmenter.enabled:hover .nametag {
-	background: url("assets/nametag_hover.png");
+	background-position: 0 0;
 }
 
 li.augmenter.enabled:hover .buy {
-	background: url("assets/hover.png");
+	background-position: 0 -40px;
 }
 
 li.augmenter.enabled:active .buy {
-	background: url("assets/click-in.png") no-repeat bottom;
-	padding-top: 12px;
+	background-position: 0 0;
+	padding-top: 11px;
+	height: 40px;
 	color: #eee;
 }
 

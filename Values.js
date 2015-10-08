@@ -1,9 +1,15 @@
+var warned = false;
 function loadProp(prop, def){
-	var cookie = localStorage[ "Values_" + prop ];
-	if (cookie)
-		return cookie;
-	else 
-		return def;
+	if( window.localStorage){
+		var cookie = window.localStorage.getItem( "Values_" + prop );
+		if (cookie)
+			return cookie;
+		else 
+			return def;
+	} else if (!warned) {
+		window.alert("Concessions Infimes nécessite pour l'instant un navigateur supportant localStorage, il semblerait que votre navigateur ne rempli pas cette contrainte.\nConcessions Infimes a été développé avec chrome et fonctionnera au mieux sous chrome.");
+		warned = true;
+	}
 }
 
 var Values = {
@@ -49,21 +55,21 @@ var Values = {
 	
 	,tutoriel: Number(loadProp("tutoriel", 0))
 
-	,save() {
-		localStorage[ "Values_capital" ] = this._capital;
-		localStorage[ "Values_clickValue" ] = this.clickValue;
-		for ( augId in this.augmenters ) { localStorage[ "Values_augmenter_" + augId] = this.augmenters[augId]; }
-		for ( itemId in this.items ) { localStorage[ "Values_item_" + itemId] = this.items[itemId]; }
-		localStorage[ "Values_tuto_intro" ] = this.tuto_intro;
-		localStorage[ "Values_tutoriel" ] = this.tutoriel;
+	,save: function() {
+		localStorage.setItem( "Values_capital", this._capital);
+		localStorage.setItem( "Values_clickValue", this.clickValue);
+		for ( augId in this.augmenters ) { localStorage.setItem( "Values_augmenter_" + augId, this.augmenters[augId]); }
+		for ( itemId in this.items ) { localStorage.setItem( "Values_item_" + itemId, this.items[itemId]); }
+		localStorage.setItem( "Values_tuto_intro", this.tuto_intro);
+		localStorage.setItem( "Values_tutoriel", this.tutoriel);
 	}
 
-	,reset() {
-		localStorage[ "Values_capital" ] = 0;
-		localStorage[ "Values_clickValue" ] = 1;
-		for ( augId in this.augmenters ) { localStorage[ "Values_augmenter_" + augId ] = 0; }
-		for ( itemId in this.items ) { localStorage[ "Values_item_" + itemId] = false; }
-		localStorage[ "Values_tuto_intro" ] = false;
-		localStorage[ "Values_tutoriel" ] = 0;
+	,reset: function() {
+		localStorage.setItem( "Values_capital", 0 );
+		localStorage.setItem( "Values_clickValue", 1 );
+		for ( augId in this.augmenters ) { localStorage.setItem(  "Values_augmenter_" + augId, 0 ); }
+		for ( itemId in this.items ) { localStorage.setItem( "Values_item_" + itemId, false ); }
+		localStorage.setItem( "Values_tuto_intro", false );
+		localStorage.setItem( "Values_tutoriel", 0 );
 	}
 };
